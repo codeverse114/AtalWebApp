@@ -1,0 +1,23 @@
+{
+  "name": "abvstvs-webapp",
+  "version": "1.0.0",
+  "description": "Atal Bihari Vajpayee Centre for Skill Training and Vocational Studies Web Application",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "cd client && npm start",
+    "server": "cd server && npm run dev",
+    "build": "cd client && npm run build",
+    "install-deps": "npm install && cd client && npm install && cd ../server && npm install",
+    "create-admin": "cd server && npm run create-admin",
+    "seed-database": "cd server && npm run seed-database",
+    "setup": "npm run install-deps && npm run create-admin && npm run seed-database",
+    "kill-ports": "taskkill /F /IM node.exe"
+  },
+  "keywords": ["education", "training", "vocational", "react", "nodejs"],
+  "author": "ABVSTVS",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
