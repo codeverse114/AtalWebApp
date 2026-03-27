@@ -4,6 +4,7 @@
   "description": "Atal Bihari Vajpayee Centre for Skill Training and Vocational Studies Web Application",
   "main": "server/index.js",
   "scripts": {
+    "start": "cd server && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "cd client && npm start",
     "server": "cd server && npm run dev",
