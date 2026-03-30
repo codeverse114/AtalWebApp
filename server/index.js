@@ -11,8 +11,20 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'https://atal-web-app.vercel.app',
+  'http://localhost:3000'
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -130,39 +142,15 @@ const startServer = async () => {
   try {
     app.listen(PORT, async () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🌐 Environment: ${process.env.NODE_ENV}`);
-      console.log(`🔗 Client URL: ${process.env.CLIENT_URL || 'http://localhost:3000'}`);
-      console.log(`📍 API URL: http://localhost:${PORT}/api`);
+      console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🔗 Allowed Origins: ${allowedOrigins.join(', ')}`);
       
       // Initialize database connection
       await connectDB();
     });
   } catch (error) {
-    if (error.code === 'EADDRINUSE') {
-      console.error(`❌ Port ${PORT} is already in use. Trying alternative port...`);
-      // Try alternative port
-      const altPort = PORT + 1;
-      app.listen(altPort, async () => {
-        console.log(`🚀 Server running on alternative port ${altPort}`);
-        console.log(`🌐 Environment: ${process.env.NODE_ENV}`);
-        console.log(`🔗 Client URL: ${process.env.CLIENT_URL || 'http://localhost:3000'}`);
-        console.log(`📍 API URL: http://localhost:${altPort}/api`);
-        
-        // Update client env file with new port
-        const fs = require('fs');
-        const clientEnvPath = '../client/.env';
-        if (fs.existsSync(clientEnvPath)) {
-          fs.writeFileSync(clientEnvPath, `REACT_APP_API_URL=http://localhost:${altPort}\n`);
-          console.log(`📝 Updated client API URL to http://localhost:${altPort}`);
-        }
-        
-        // Initialize database connection
-        await connectDB();
-      });
-    } else {
-      console.error('❌ Failed to start server:', error);
-      process.exit(1);
-    }
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
   }
 };
 
