@@ -35,8 +35,14 @@ let dbConnected = false;
 // Simple MongoDB Connection
 const connectDB = async () => {
   try {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      console.error('❌ MONGODB_URI is not defined in environment variables!');
+      return;
+    }
+    
     console.log('🔗 Connecting to MongoDB...');
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const conn = await mongoose.connect(uri);
     
     console.log('✅ Connected to MongoDB Atlas');
     console.log(`📍 Database: ${conn.connection.name}`);
@@ -48,6 +54,9 @@ const connectDB = async () => {
     
   } catch (error) {
     console.error('❌ MongoDB connection error:', error.message);
+    if (error.message.includes('IP not whitelisted')) {
+      console.error('📢 ACTION REQUIRED: Please whitelist all IPs (0.0.0.0/0) in MongoDB Atlas for Render deployment.');
+    }
     dbConnected = false;
     app.locals.dbConnected = false;
   }
