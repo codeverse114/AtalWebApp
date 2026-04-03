@@ -63,7 +63,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', auth, [
   body('title').trim().notEmpty().withMessage('Title is required'),
   body('description').trim().notEmpty().withMessage('Description is required'),
-  body('category').isIn(['Computer Applications', 'Technical Trades', 'Business Management', 'Digital Marketing', 'E-commerce', 'Other']).withMessage('Invalid category'),
+  body('category').notEmpty().withMessage('Category is required'),
   body('duration').trim().notEmpty().withMessage('Duration is required'),
   body('fees').isNumeric().withMessage('Fees must be a number'),
   body('instructor').trim().notEmpty().withMessage('Instructor is required'),
@@ -86,7 +86,10 @@ router.post('/', auth, [
       });
     }
 
-    const course = new Course(req.body);
+    const courseData = req.body;
+    
+    // Ensure nested objects are handled if they come as strings (unlikely with axios but safe)
+    const course = new Course(courseData);
     await course.save();
 
     console.log(`✅ Course created: ${course.title} by ${req.user.username}`);

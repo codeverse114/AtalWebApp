@@ -10,6 +10,7 @@ import Notices from './pages/Notices';
 import CertificateVerification from './pages/CertificateVerification';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import CourseDetails from './pages/CourseDetails';
 import Dashboard from './pages/admin/Dashboard';
 import AdminCourses from './pages/admin/AdminCourses';
 import AdminNotices from './pages/admin/AdminNotices';
@@ -71,6 +72,7 @@ const App = () => {
               <Route path="/certificate" element={<CertificateVerification />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/course/:id" element={<CourseDetails />} />
               
               {/* Admin Routes */}
               <Route path="/admin/dashboard" element={

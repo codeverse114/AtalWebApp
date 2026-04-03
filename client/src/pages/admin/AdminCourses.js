@@ -12,18 +12,47 @@ const AdminCourses = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [toast, setToast] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
-  const [formData, setFormData] = useState({
+  const [activeTab, setActiveTab] = useState('basic');
+
+  const initialFormData = {
     title: '',
     description: '',
     category: 'Computer Applications',
     duration: '',
-    fees: '',
+    fees: 0,
     instructor: '',
     schedule: '',
     maxStudents: 30,
+    image: '',
     prerequisites: [],
-    learningOutcomes: []
-  });
+    learningOutcomes: [],
+    // New Fields
+    programObjectives: [],
+    programOutcomes: [],
+    aboutCourse: '',
+    minQualification: '',
+    detailedFees: {
+      registration: 0,
+      tuition: 0,
+      studyMaterial: 0,
+      practical: 0,
+      examination: 0,
+      internship: 0,
+      total: 0
+    },
+    whyChoose: [],
+    papers: [],
+    examinationScheme: {
+      theoryInternal: 30,
+      theoryFinal: 70,
+      practical: 'Teaching, Internship & Viva',
+      minPassing: 40,
+      evaluationType: 'Semester-based'
+    },
+    practicals: []
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const showToast = useCallback((message, type = 'success') => setToast({ message, type }), []);
 
@@ -67,8 +96,8 @@ const AdminCourses = () => {
     if (searchTerm) {
       filtered = filtered.filter(course =>
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.instructor.toLowerCase().includes(searchTerm.toLowerCase())
+        (course.description && course.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (course.instructor && course.instructor.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
@@ -77,20 +106,131 @@ const AdminCourses = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setFormData(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
+
+  const handleArrayChange = (field, index, value) => {
+    setFormData(prev => {
+      const newArr = [...prev[field]];
+      newArr[index] = value;
+      return { ...prev, [field]: newArr };
+    });
+  };
+
+  const addArrayItem = (field) => {
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [field]: [...prev[field], '']
     }));
+  };
+
+  const removeArrayItem = (field, index) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index)
+    }));
+  };
+
+  // Complex Nested Handlers (Papers, Modules, etc.)
+  const addPaper = () => {
+    setFormData(prev => ({
+      ...prev,
+      papers: [...prev.papers, { title: '', totalHours: 0, modules: [] }]
+    }));
+  };
+
+  const updatePaper = (index, field, value) => {
+    setFormData(prev => {
+      const newPapers = [...prev.papers];
+      newPapers[index] = { ...newPapers[index], [field]: value };
+      return { ...prev, papers: newPapers };
+    });
+  };
+
+  const addModule = (paperIndex) => {
+    setFormData(prev => {
+      const newPapers = [...prev.papers];
+      newPapers[paperIndex].modules.push({ title: '', hours: 0, topics: [] });
+      return { ...prev, papers: newPapers };
+    });
+  };
+
+  const updateModule = (paperIndex, moduleIndex, field, value) => {
+    setFormData(prev => {
+      const newPapers = [...prev.papers];
+      newPapers[paperIndex].modules[moduleIndex] = {
+        ...newPapers[paperIndex].modules[moduleIndex],
+        [field]: value
+      };
+      return { ...prev, papers: newPapers };
+    });
+  };
+
+  const addTopic = (paperIndex, moduleIndex) => {
+    setFormData(prev => {
+      const newPapers = [...prev.papers];
+      newPapers[paperIndex].modules[moduleIndex].topics.push('');
+      return { ...prev, papers: newPapers };
+    });
+  };
+
+  const updateTopic = (paperIndex, moduleIndex, topicIndex, value) => {
+    setFormData(prev => {
+      const newPapers = [...prev.papers];
+      newPapers[paperIndex].modules[moduleIndex].topics[topicIndex] = value;
+      return { ...prev, papers: newPapers };
+    });
+  };
+
+  // Handle Practical form logic
+  const addPractical = () => {
+    setFormData(prev => ({
+      ...prev,
+      practicals: [...prev.practicals, { title: '', totalHours: 0, components: [] }]
+    }));
+  };
+
+  const addPracticalComponent = (practIndex) => {
+    setFormData(prev => {
+      const newPracts = [...prev.practicals];
+      newPracts[practIndex].components.push({ name: '', hours: 0 });
+      return { ...prev, practicals: newPracts };
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Calculate total fee automatically before submitting
+      const f = formData.detailedFees;
+      const total = Number(f.registration) + Number(f.tuition) + Number(f.studyMaterial) + 
+                    Number(f.practical) + Number(f.examination) + Number(f.internship);
+      
+      const finalData = {
+        ...formData,
+        fees: total,
+        detailedFees: { ...f, total }
+      };
+
       if (editingCourse) {
-        await api.put(`/api/courses/${editingCourse._id}`, formData);
+        await api.put(`/api/courses/${editingCourse._id}`, finalData);
         showToast('Course updated successfully!');
       } else {
-        await api.post('/api/courses', formData);
+        await api.post('/api/courses', finalData);
         showToast('Course created successfully!');
       }
       fetchCourses();
@@ -104,18 +244,18 @@ const AdminCourses = () => {
   const handleEdit = (course) => {
     setEditingCourse(course);
     setFormData({
-      title: course.title,
-      description: course.description,
-      category: course.category,
-      duration: course.duration,
-      fees: course.fees,
-      instructor: course.instructor,
-      schedule: course.schedule,
-      maxStudents: course.maxStudents,
-      prerequisites: course.prerequisites || [],
-      learningOutcomes: course.learningOutcomes || []
+      ...initialFormData,
+      ...course,
+      detailedFees: course.detailedFees || initialFormData.detailedFees,
+      examinationScheme: course.examinationScheme || initialFormData.examinationScheme,
+      papers: course.papers || [],
+      practicals: course.practicals || [],
+      programObjectives: course.programObjectives || [],
+      programOutcomes: course.programOutcomes || [],
+      whyChoose: course.whyChoose || []
     });
     setShowAddForm(true);
+    setActiveTab('basic');
   };
 
   const handleDelete = (courseId) => {
@@ -136,20 +276,10 @@ const AdminCourses = () => {
   };
 
   const resetForm = () => {
-    setFormData({
-      title: '',
-      description: '',
-      category: 'Computer Applications',
-      duration: '',
-      fees: '',
-      instructor: '',
-      schedule: '',
-      maxStudents: 30,
-      prerequisites: [],
-      learningOutcomes: []
-    });
+    setFormData(initialFormData);
     setEditingCourse(null);
     setShowAddForm(false);
+    setActiveTab('basic');
   };
 
   const filteredCourses = filterCourses();
@@ -266,131 +396,393 @@ const AdminCourses = () => {
                 </h2>
                 <button
                   onClick={resetForm}
-                  className="p-3 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all"
+                  className="p-3 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all transition-colors"
                 >
                   <X className="h-6 w-6" />
                 </button>
               </div>
 
+              {/* Tabs Navigation */}
+              <div className="flex flex-wrap gap-2 mb-10 border-b border-white/10 pb-4">
+                {[
+                  { id: 'basic', label: 'Basic Info' },
+                  { id: 'syllabus', label: 'Syllabus/Papers' },
+                  { id: 'fees', label: 'Fees & Admission' },
+                  { id: 'highlights', label: 'Highlights/Objectives' },
+                  { id: 'exam', label: 'Exam Scheme' }
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${
+                      activeTab === tab.id 
+                      ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/20' 
+                      : 'bg-white/5 text-secondary-400 hover:bg-white/10'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Course Title</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={formData.title}
-                      onChange={handleChange}
-                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Primary Category</label>
-                    <select
-                      name="category"
-                      value={formData.category}
-                      onChange={handleChange}
-                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
-                      required
-                    >
-                      <option value="Computer Applications">Computer Applications</option>
-                      <option value="Technical Trades">Technical Trades</option>
-                      <option value="Business Management">Business Management</option>
-                      <option value="Digital Marketing">Digital Marketing</option>
-                      <option value="E-commerce">E-commerce</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                </div>
+                {activeTab === 'basic' && (
+                  <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Course Title</label>
+                        <input
+                          type="text"
+                          name="title"
+                          value={formData.title}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Primary Category</label>
+                        <select
+                          name="category"
+                          value={formData.category}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
+                          required
+                        >
+                          {categories.filter(c => c.value !== 'all').map(cat => (
+                            <option key={cat.value} value={cat.value}>{cat.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
 
-                <div className="space-y-3">
-                  <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Comprehensive Description</label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 p-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg resize-none"
-                    required
-                  />
-                </div>
+                    <div className="space-y-3">
+                      <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Short Description</label>
+                      <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        rows={2}
+                        className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 p-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg resize-none"
+                        required
+                      />
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Duration</label>
-                    <input
-                      type="text"
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleChange}
-                      placeholder="e.g., 3 months"
-                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Tuition Fees (₹)</label>
-                    <input
-                      type="number"
-                      name="fees"
-                      value={formData.fees}
-                      onChange={handleChange}
-                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
-                      required
-                    />
-                  </div>
-                </div>
+                    <div className="space-y-3">
+                      <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">About Course (Long Content)</label>
+                      <textarea
+                        name="aboutCourse"
+                        value={formData.aboutCourse}
+                        onChange={handleChange}
+                        rows={4}
+                        placeholder="Detailed overview of the course..."
+                        className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 p-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg resize-none"
+                      />
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Lead Instructor</label>
-                    <input
-                      type="text"
-                      name="instructor"
-                      value={formData.instructor}
-                      onChange={handleChange}
-                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
-                      required
-                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Duration</label>
+                        <input
+                          type="text"
+                          name="duration"
+                          value={formData.duration}
+                          onChange={handleChange}
+                          placeholder="e.g., 1 Year (2 Semesters)"
+                          className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Lead Instructor</label>
+                        <input
+                          type="text"
+                          name="instructor"
+                          value={formData.instructor}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
+                          required
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Session Schedule</label>
-                    <input
-                      type="text"
-                      name="schedule"
-                      value={formData.schedule}
-                      onChange={handleChange}
-                      placeholder="e.g., Mon-Fri 9AM-12PM"
-                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
-                      required
-                    />
+                )}
+
+                {activeTab === 'syllabus' && (
+                  <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-xl font-bold text-white">Course Papers & Modules</h3>
+                      <button 
+                        type="button" 
+                        onClick={addPaper}
+                        className="btn btn-secondary py-2 px-4 rounded-xl text-sm"
+                      >
+                        <Plus className="h-4 w-4 mr-2" /> Add Paper
+                      </button>
+                    </div>
+
+                    {formData.papers.map((paper, pIdx) => (
+                      <div key={pIdx} className="p-6 bg-white/5 rounded-[24px] border border-white/10 space-y-6">
+                        <div className="flex gap-4">
+                          <input
+                            placeholder="Paper Title (e.g. Paper 1: Child Psychology)"
+                            value={paper.title}
+                            onChange={(e) => updatePaper(pIdx, 'title', e.target.value)}
+                            className="flex-1 bg-slate-900/50 border border-white/10 h-12 px-4 rounded-xl text-white outline-none"
+                          />
+                          <input
+                            type="number"
+                            placeholder="Hours"
+                            value={paper.totalHours}
+                            onChange={(e) => updatePaper(pIdx, 'totalHours', e.target.value)}
+                            className="w-24 bg-slate-900/50 border border-white/10 h-12 px-4 rounded-xl text-white outline-none"
+                          />
+                          <button 
+                            type="button" 
+                            onClick={() => removeArrayItem('papers', pIdx)}
+                            className="p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        <div className="ml-8 space-y-4">
+                          <div className="flex justify-between items-center">
+                            <h4 className="text-sm font-bold text-secondary-400">Modules</h4>
+                            <button 
+                              type="button" 
+                              onClick={() => addModule(pIdx)}
+                              className="text-xs font-bold text-primary-500 hover:underline"
+                            >
+                              + Add Module
+                            </button>
+                          </div>
+                          {paper.modules.map((module, mIdx) => (
+                            <div key={mIdx} className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-4">
+                              <div className="flex gap-3">
+                                <input
+                                  placeholder="Module Title"
+                                  value={module.title}
+                                  onChange={(e) => updateModule(pIdx, mIdx, 'title', e.target.value)}
+                                  className="flex-1 bg-slate-900/50 border border-white/10 h-10 px-4 rounded-lg text-white text-sm"
+                                />
+                                <input
+                                  type="number"
+                                  placeholder="Hrs"
+                                  value={module.hours}
+                                  onChange={(e) => updateModule(pIdx, mIdx, 'hours', e.target.value)}
+                                  className="w-20 bg-slate-900/50 border border-white/10 h-10 px-4 rounded-lg text-white text-sm"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                {module.topics.map((topic, tIdx) => (
+                                  <div key={tIdx} className="flex gap-2">
+                                    <input
+                                      placeholder="Topic bullet point"
+                                      value={topic}
+                                      onChange={(e) => updateTopic(pIdx, mIdx, tIdx, e.target.value)}
+                                      className="flex-1 bg-transparent border-b border-white/10 h-8 px-2 text-slate-300 text-xs outline-none"
+                                    />
+                                  </div>
+                                ))}
+                                <button 
+                                  type="button" 
+                                  onClick={() => addTopic(pIdx, mIdx)}
+                                  className="text-[10px] font-black text-secondary-500 uppercase tracking-widest hover:text-white"
+                                >
+                                  + Add Topic
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
+                )}
 
-                <div>
-                  <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Enrollment Capacity</label>
-                  <input
-                    type="number"
-                    name="maxStudents"
-                    value={formData.maxStudents}
-                    onChange={handleChange}
-                    min="1"
-                    className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
-                  />
-                </div>
+                {activeTab === 'fees' && (
+                  <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Minimum Qualification</label>
+                        <input
+                          type="text"
+                          name="minQualification"
+                          value={formData.minQualification}
+                          onChange={handleChange}
+                          placeholder="e.g. 10+2 (Intermediate)"
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Registration Fee (₹)</label>
+                        <input
+                          type="number"
+                          name="detailedFees.registration"
+                          value={formData.detailedFees.registration}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Tuition Fee (₹)</label>
+                        <input
+                          type="number"
+                          name="detailedFees.tuition"
+                          value={formData.detailedFees.tuition}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Practical/Training Fee (₹)</label>
+                        <input
+                          type="number"
+                          name="detailedFees.practical"
+                          value={formData.detailedFees.practical}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Examination Fee (₹)</label>
+                        <input
+                          type="number"
+                          name="detailedFees.examination"
+                          value={formData.detailedFees.examination}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Internship/ID/Records (₹)</label>
+                        <input
+                          type="number"
+                          name="detailedFees.internship"
+                          value={formData.detailedFees.internship}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-                <div className="flex gap-4 pt-4">
+                {activeTab === 'highlights' && (
+                  <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-center">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest">Program Objectives</label>
+                        <button type="button" onClick={() => addArrayItem('programObjectives')} className="text-xs text-primary-500 font-bold">+ Add Objective</button>
+                      </div>
+                      {formData.programObjectives.map((obj, i) => (
+                        <div key={i} className="flex gap-3">
+                          <input
+                            value={obj}
+                            onChange={(e) => handleArrayChange('programObjectives', i, e.target.value)}
+                            className="flex-1 bg-slate-900/50 border border-white/10 h-12 px-4 rounded-xl text-white outline-none"
+                          />
+                          <button type="button" onClick={() => removeArrayItem('programObjectives', i)} className="text-red-500"><Trash2 className="h-4 w-4" /></button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-center">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest">Program Outcomes (POs)</label>
+                        <button type="button" onClick={() => addArrayItem('programOutcomes')} className="text-xs text-primary-500 font-bold">+ Add Outcome</button>
+                      </div>
+                      {formData.programOutcomes.map((obj, i) => (
+                        <div key={i} className="flex gap-3">
+                          <input
+                            value={obj}
+                            onChange={(e) => handleArrayChange('programOutcomes', i, e.target.value)}
+                            className="flex-1 bg-slate-900/50 border border-white/10 h-12 px-4 rounded-xl text-white outline-none"
+                          />
+                          <button type="button" onClick={() => removeArrayItem('programOutcomes', i)} className="text-red-500"><Trash2 className="h-4 w-4" /></button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-center">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest">Why Choose Highlights</label>
+                        <button type="button" onClick={() => addArrayItem('whyChoose')} className="text-xs text-primary-500 font-bold">+ Add Point</button>
+                      </div>
+                      {formData.whyChoose.map((obj, i) => (
+                        <div key={i} className="flex gap-3">
+                          <input
+                            value={obj}
+                            onChange={(e) => handleArrayChange('whyChoose', i, e.target.value)}
+                            className="flex-1 bg-slate-900/50 border border-white/10 h-12 px-4 rounded-xl text-white outline-none"
+                          />
+                          <button type="button" onClick={() => removeArrayItem('whyChoose', i)} className="text-red-500"><Trash2 className="h-4 w-4" /></button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'exam' && (
+                  <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Internal Theory (%)</label>
+                        <input
+                          type="number"
+                          name="examinationScheme.theoryInternal"
+                          value={formData.examinationScheme.theoryInternal}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Final Theory (%)</label>
+                        <input
+                          type="number"
+                          name="examinationScheme.theoryFinal"
+                          value={formData.examinationScheme.theoryFinal}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Practical Exam Details</label>
+                        <input
+                          type="text"
+                          name="examinationScheme.practical"
+                          value={formData.examinationScheme.practical}
+                          onChange={handleChange}
+                          placeholder="e.g. Teaching, Internship & Viva"
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Passing Percentage (%)</label>
+                        <input
+                          type="number"
+                          name="examinationScheme.minPassing"
+                          value={formData.examinationScheme.minPassing}
+                          onChange={handleChange}
+                          className="w-full bg-slate-900/50 border border-white/10 h-16 px-6 rounded-2xl text-white outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex gap-4 pt-8 border-t border-white/10">
                   <button
                     type="submit"
-                    className="btn btn-primary h-16 px-12 rounded-2xl text-lg font-black"
+                    className="btn btn-primary h-16 px-12 rounded-2xl text-lg font-black bg-primary-600 hover:bg-primary-700 text-white shadow-xl shadow-primary-600/30"
                   >
                     {editingCourse ? 'UPDATE COURSE' : 'PUBLISH COURSE'}
                   </button>
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="btn btn-outline h-16 px-12 rounded-2xl text-lg font-black"
+                    className="btn btn-outline h-16 px-12 rounded-2xl text-lg font-black border border-white/20 text-white hover:bg-white/5"
                   >
                     DISCARD
                   </button>

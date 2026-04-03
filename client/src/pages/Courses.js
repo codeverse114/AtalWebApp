@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BookOpen, Clock, Users, IndianRupee, Search, X, CheckCircle, AlertCircle } from 'lucide-react';
 import api from '../utils/axios';
 
@@ -53,6 +54,7 @@ const categoryBadge = {
 };
 
 const Courses = () => {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -226,22 +228,26 @@ const Courses = () => {
 
                   {/* Card Body */}
                     <div className="p-6 space-y-4">
-                      <h3 className="text-lg font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+                      <h3 className="text-xl font-black text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-1 mb-2">
                         {course.title}
                       </h3>
-                      <p className="text-secondary-500 dark:text-slate-400 text-sm line-clamp-2">{course.description}</p>
+                      <p className="text-secondary-500 dark:text-slate-400 text-sm line-clamp-2 min-h-[40px] mb-4">{course.description}</p>
   
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-secondary-600 dark:text-slate-300">
-                          <Users className="h-4 w-4 text-primary-500 dark:text-primary-400" />
-                          <span className="font-medium">{course.instructor}</span>
+                      <div className="space-y-3 text-sm border-y border-slate-100 dark:border-white/5 py-4">
+                        <div className="flex items-center gap-3 text-secondary-600 dark:text-slate-300">
+                          <div className="w-8 h-8 rounded-full bg-primary-500/10 flex items-center justify-center text-primary-500">
+                            <Users className="h-4 w-4" />
+                          </div>
+                          <span className="font-bold">{course.instructor}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-secondary-600 dark:text-slate-300">
-                            <Clock className="h-4 w-4 text-primary-500 dark:text-primary-400" />
-                            <span>{course.duration}</span>
+                          <div className="flex items-center gap-3 text-secondary-600 dark:text-slate-300">
+                             <div className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                                <Clock className="h-4 w-4" />
+                             </div>
+                            <span className="font-bold">{course.duration}</span>
                           </div>
-                          <div className="flex items-center gap-1 text-primary-700 dark:text-primary-400 font-bold">
+                          <div className="flex items-center gap-1 text-primary-700 dark:text-primary-400 font-black text-lg">
                             <IndianRupee className="h-4 w-4" />
                             <span>{course.fees?.toLocaleString('en-IN')}</span>
                           </div>
@@ -250,28 +256,33 @@ const Courses = () => {
 
                     {/* Enrollment Bar */}
                     <div>
-                      <div className="flex justify-between text-xs text-secondary-500 dark:text-slate-400 mb-1.5">
-                        <span>Enrollment</span>
-                        <span className="font-semibold text-secondary-700 dark:text-slate-300">{course.currentStudents}/{course.maxStudents}</span>
+                      <div className="flex justify-between text-xs font-black text-secondary-500 uppercase tracking-widest mb-2">
+                        <span>Admission Status</span>
+                        <span className={`${isFull ? 'text-rose-500' : 'text-emerald-500'}`}>{course.currentStudents}/{course.maxStudents} SEATS</span>
                       </div>
-                      <div className="w-full bg-secondary-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-secondary-200 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden shadow-inner">
                         <div
-                          className={`h-2 rounded-full transition-all duration-500 ${isFull ? 'bg-red-500' : 'bg-gradient-to-r from-primary-500 to-primary-600'}`}
+                          className={`h-full rounded-full transition-all duration-700 ${isFull ? 'bg-red-500' : 'bg-gradient-to-r from-primary-500 via-primary-600 to-indigo-600'}`}
                           style={{ width: `${fillPct}%` }}
                         />
                       </div>
-                      {fillPct > 80 && !isFull && (
-                        <p className="text-xs text-orange-600 font-semibold mt-1">⚡ Almost full — {course.maxStudents - course.currentStudents} seats left</p>
-                      )}
                     </div>
 
-                    <button
-                      onClick={() => handleEnroll(course)}
-                      disabled={isFull}
-                      className={`btn w-full ${isFull ? 'opacity-50 cursor-not-allowed bg-secondary-300 text-secondary-600 shadow-none hover:translate-y-0' : 'btn-primary'}`}
-                    >
-                      {isFull ? 'Course Full' : 'Enroll Now via WhatsApp'}
-                    </button>
+                    <div className="flex gap-2">
+                        <button
+                        onClick={() => navigate(`/course/${course._id}`)}
+                        className="btn btn-outline flex-1 h-14 rounded-2xl font-black text-xs uppercase tracking-widest border-2"
+                        >
+                        VIEW DETAILS
+                        </button>
+                        <button
+                        onClick={() => handleEnroll(course)}
+                        disabled={isFull}
+                        className={`btn flex-1 h-14 rounded-2xl font-black text-xs uppercase tracking-widest ${isFull ? 'opacity-50 cursor-not-allowed bg-secondary-300 text-secondary-600 shadow-none' : 'btn-primary'}`}
+                        >
+                        {isFull ? 'FULL' : 'ENROLL'}
+                        </button>
+                    </div>
                   </div>
                 </div>
               );
