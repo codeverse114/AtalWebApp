@@ -120,7 +120,7 @@ const Home = () => {
       </div>
 
       {/* ── Hero Section ── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-slate-900 text-white py-28 ring-1 ring-white/10">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-slate-900 text-white py-20 ring-1 ring-white/10">
         
         {/* Decorative blobs */}
         <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl animate-blob" />
@@ -133,13 +133,13 @@ const Home = () => {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 glass-morphism rounded-full text-sm font-semibold mb-8 animate-fadeInUp">
-            <Star className="h-4 w-4 text-gold-400 fill-gold-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 glass-morphism rounded-full text-xs font-semibold mb-6 animate-fadeInUp">
+            <Star className="h-3.5 w-3.5 text-gold-400 fill-gold-400" />
             <span className="text-blue-100">Government Recognized • NSDC Certified</span>
-            <CheckCircle className="h-4 w-4 text-emerald-400" />
+            <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
           </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-5 leading-tight animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
             Atal Bihari Vajpayee
             <br />
             <span className="bg-gradient-to-r from-gold-300 via-gold-400 to-gold-200 bg-clip-text text-transparent drop-shadow-sm">
@@ -148,24 +148,24 @@ const Home = () => {
             <br />
             and Vocational Studies
           </h1>
-          <p className="text-xl md:text-2xl mb-10 text-blue-200 max-w-3xl mx-auto font-medium animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+          <p className="text-lg md:text-xl mb-8 text-blue-200 max-w-3xl mx-auto font-medium animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             Empowering Youth Through Quality Skill Education &amp; Government-Certified Programs
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
             <Link
               to="/courses"
-              className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-primary-900 rounded-2xl
-                         shadow-2xl hover:shadow-white/25 hover:-translate-y-1 transition-all duration-300 animate-pulseGlow"
+              className="group relative inline-flex items-center justify-center px-6 py-3 text-base font-bold bg-white text-primary-900 rounded-xl
+                         shadow-2xl hover:shadow-white/25 hover:-translate-y-0.5 transition-all duration-300 animate-pulseGlow"
             >
               Explore Courses
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 h-4.5 w-4.5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold border-2 border-white/50
-                         text-white rounded-2xl hover:bg-white/10 hover:border-white hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm"
+              className="inline-flex items-center justify-center px-6 py-3 text-base font-bold border-2 border-white/50
+                         text-white rounded-xl hover:bg-white/10 hover:border-white hover:-translate-y-0.5 transition-all duration-300 backdrop-blur-sm"
             >
               Contact Us
             </Link>
@@ -184,22 +184,22 @@ const Home = () => {
       </section>
 
       {/* ── Stats Section ── */}
-      <section className="py-16 bg-white dark:bg-slate-900/50 relative">
+      <section className="py-10 bg-white dark:bg-slate-900/50 relative">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-50/30 via-white dark:via-transparent to-indigo-50/30 dark:to-indigo-500/5" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {statCards.map((stat, idx) => (
               <div
                 key={idx}
-                className={`group text-center p-6 rounded-2xl border border-secondary-100 dark:border-white/10 bg-white dark:bg-slate-800/50 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 reveal-scale stagger-${(idx % 4) + 1}`}
+                className={`group text-center p-4 rounded-xl border border-secondary-100 dark:border-white/10 bg-white dark:bg-slate-800/50 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 reveal-scale stagger-${(idx % 4) + 1}`}
               >
-                <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.color} shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <stat.icon className="h-7 w-7 text-white" />
+                <div className={`inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br ${stat.color} shadow-md mb-3 group-hover:scale-105 transition-transform duration-300`}>
+                  <stat.icon className="h-5.5 w-5.5 text-white" />
                 </div>
-                <div className="text-4xl font-black text-secondary-900 dark:text-white mb-1">
+                <div className="text-2xl font-black text-secondary-900 dark:text-white mb-0.5">
                   <AnimatedNumber target={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-sm font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-wide">{stat.label}</div>
+                <div className="text-xs font-semibold text-secondary-500 dark:text-slate-400 uppercase tracking-wide">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -207,7 +207,7 @@ const Home = () => {
       </section>
 
       {/* ── Features Section ── */}
-      <section className="py-20 bg-gradient-to-br from-secondary-50 to-primary-50/30 dark:from-slate-950 dark:to-primary-900/20">
+      <section className="py-12 bg-gradient-to-br from-secondary-50 to-primary-50/30 dark:from-slate-950 dark:to-primary-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="section-header reveal">
             <span className="section-badge">Why Choose Us</span>
@@ -216,18 +216,18 @@ const Home = () => {
               We provide comprehensive skill development programs that prepare you for the modern workforce.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className={`group card text-center hover:-translate-y-2 transition-all duration-300 reveal stagger-${(idx % 4) + 1}`}
+                className={`group card text-center hover:-translate-y-1 transition-all duration-300 reveal stagger-${(idx % 4) + 1}`}
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} shadow-xl mb-6 group-hover:scale-110 group-hover:shadow-2xl transition-all duration-300 mx-auto`}>
-                  <feature.icon className="h-8 w-8 text-white" />
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} shadow-md mb-4 group-hover:scale-105 group-hover:shadow-lg transition-all duration-300 mx-auto`}>
+                  <feature.icon className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-secondary-900 mb-3">{feature.title}</h3>
-                <p className="text-secondary-500 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-base font-bold text-secondary-900 mb-2">{feature.title}</h3>
+                <p className="text-secondary-500 text-xs leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -295,25 +295,25 @@ const Home = () => {
       </section>
 
       {/* ── Recent Notices ── */}
-      <section className="py-20 bg-gradient-to-br from-secondary-50 to-primary-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-primary-900/20 transition-colors duration-500">
+      <section className="py-12 bg-gradient-to-br from-secondary-50 to-primary-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-primary-900/20 transition-colors duration-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4 reveal-left">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 reveal-left">
             <div>
               <span className="section-badge">Updates</span>
-              <h2 className="section-title mb-2 dark:text-white">Latest Notices</h2>
-              <p className="text-secondary-500 dark:text-slate-400 text-lg">Stay updated with important announcements</p>
+              <h2 className="section-title mb-1 dark:text-white">Latest Notices</h2>
+              <p className="text-secondary-500 dark:text-slate-400 text-sm">Stay updated with important announcements</p>
             </div>
             <Link to="/notices" className="btn btn-outline hidden md:inline-flex flex-shrink-0 reveal-right">
-              View All Notices <ArrowRight className="ml-2 h-4 w-4" />
+              View All Notices <ArrowRight className="ml-2 h-3.5 w-3.5" />
             </Link>
           </div>
-
+ 
           {recentNotices.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recentNotices.map((notice) => (
                 <div
                   key={notice._id}
-                  className={`card border-l-4 ${priorityBorderColor[notice.priority] || priorityBorderColor.default} hover:-translate-y-1 transition-all duration-300 p-6`}
+                  className={`card border-l-4 ${priorityBorderColor[notice.priority] || priorityBorderColor.default} hover:-translate-y-0.5 transition-all duration-300 p-5`}
                 >
                   <div className="flex gap-2 mb-3 flex-wrap">
                     <span className="badge badge-primary capitalize">{notice.category}</span>
@@ -343,26 +343,26 @@ const Home = () => {
       </section>
 
       {/* ── CTA Section ── */}
-      <section className="py-20 relative overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-slate-900 text-white">
+      <section className="py-12 relative overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-slate-900 text-white">
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary-400/20 rounded-full blur-3xl" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-sm font-semibold mb-6">
-            <Zap className="h-4 w-4 text-gold-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-xs font-semibold mb-5">
+            <Zap className="h-3.5 w-3.5 text-gold-400" />
             <span>Limited Seats — Apply Today</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black mb-6">
+          <h2 className="text-2xl md:text-4xl font-black mb-5">
             Ready to Start Your
             <span className="bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent"> Journey?</span>
           </h2>
-          <p className="text-xl text-primary-100 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">
             Join hundreds of successful students who have transformed their careers through ABVSTVS programs.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/courses" className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-primary-900 rounded-2xl shadow-2xl hover:shadow-white/20 hover:-translate-y-1 transition-all duration-300">
-              Browse All Courses <ArrowRight className="ml-2 h-5 w-5" />
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/courses" className="inline-flex items-center justify-center px-6 py-3 text-base font-bold bg-white text-primary-900 rounded-xl shadow-2xl hover:shadow-white/20 hover:-translate-y-0.5 transition-all duration-300">
+              Browse All Courses <ArrowRight className="ml-2 h-4.5 w-4.5" />
             </Link>
-            <Link to="/contact" className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold border-2 border-white/50 text-white rounded-2xl hover:bg-white/10 hover:-translate-y-1 transition-all duration-300">
+            <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 text-base font-bold border-2 border-white/50 text-white rounded-xl hover:bg-white/10 hover:-translate-y-0.5 transition-all duration-300">
               Talk to Counselor
             </Link>
           </div>

@@ -57,19 +57,19 @@ const Navbar = () => {
         }`}
     >
       {scrolled && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-500/50 to-transparent animate-pulse-slow" />}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center transition-all duration-500 ${scrolled ? 'h-14' : 'h-16'}`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className={`flex justify-between items-center transition-all duration-500 ${scrolled ? 'h-12' : 'h-14'}`}>
 
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group flex-shrink-0">
+          <Link to="/" className="flex items-center space-x-2.5 group flex-shrink-0">
             <div className="relative">
-              <div className="group-hover:scale-110 transition-transform duration-300">
-                <img src="/logo.png" alt="ABVSTVS Logo" className="h-16 w-16 object-contain filter drop-shadow-md" />
+              <div className="group-hover:scale-105 transition-transform duration-300">
+                <img src="/logo.png" alt="ABVSTVS Logo" className="h-11 w-11 object-contain filter drop-shadow-md" />
               </div>
             </div>
             <div>
-              <h1 className={`text-xl font-extrabold leading-tight transition-colors duration-500 ${scrolled ? 'text-white' : 'text-primary-900'}`}>ABVSTVS</h1>
-              <p className={`text-[10px] hidden sm:block font-medium tracking-wide leading-none transition-colors duration-500 ${scrolled ? 'text-blue-300/80' : 'text-secondary-500'}`}>
+              <h1 className={`text-lg font-extrabold leading-tight transition-colors duration-500 ${scrolled ? 'text-white' : 'text-primary-900'}`}>ABVSTVS</h1>
+              <p className={`text-[9px] hidden sm:block font-medium tracking-wide leading-none transition-colors duration-500 ${scrolled ? 'text-blue-300/80' : 'text-secondary-500'}`}>
                 Skill Training & Vocational Studies
               </p>
             </div>

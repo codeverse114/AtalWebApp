@@ -115,23 +115,23 @@ const Courses = () => {
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       {/* Hero Header */}
-      <div className="bg-gradient-to-br from-indigo-900 via-primary-800 to-blue-700 text-white py-16 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-900 via-primary-800 to-blue-700 text-white py-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-block px-4 py-1.5 bg-white/10 text-blue-100 text-sm font-semibold rounded-full mb-4 border border-white/20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <span className="inline-block px-3 py-1 bg-white/10 text-blue-100 text-xs font-semibold rounded-full mb-3 border border-white/20">
             All Programs
           </span>
-          <h1 className="text-4xl md:text-5xl font-black mb-4">Our Courses</h1>
-          <p className="text-xl text-blue-200 max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-black mb-3">Our Courses</h1>
+          <p className="text-lg text-blue-200 max-w-2xl mx-auto">
             Discover our comprehensive range of skill development programs designed to enhance your career prospects.
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           {[
             { label: 'Available Courses', value: filteredCourses.length, color: 'text-primary-600' },
             { label: 'Categories', value: categories.length - 1, color: 'text-emerald-600' },
