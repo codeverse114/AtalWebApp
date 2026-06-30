@@ -49,7 +49,9 @@ const AdminCourses = () => {
       minPassing: 40,
       evaluationType: 'Semester-based'
     },
-    practicals: []
+    practicals: [],
+    adIds: '',
+    redirectUrls: ''
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -502,6 +504,31 @@ const AdminCourses = () => {
                           onChange={handleChange}
                           className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg"
                           required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Ad IDs (comma-separated)</label>
+                        <input
+                          type="text"
+                          name="adIds"
+                          value={formData.adIds || ''}
+                          onChange={handleChange}
+                          placeholder="e.g. ad1, ad2, ad3"
+                          className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg font-mono"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Redirect URLs (comma-separated)</label>
+                        <input
+                          type="text"
+                          name="redirectUrls"
+                          value={formData.redirectUrls || ''}
+                          onChange={handleChange}
+                          placeholder="e.g. https://wa.me/num1, https://wa.me/num2"
+                          className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg font-mono"
                         />
                       </div>
                     </div>

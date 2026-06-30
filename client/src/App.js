@@ -25,6 +25,14 @@ import './index.css';
 
 const App = () => {
   useEffect(() => {
+    // Capture and persist adId/ad_id from query parameters
+    const queryParams = new URLSearchParams(window.location.search);
+    const urlAdId = queryParams.get('adId') || queryParams.get('ad_id');
+    if (urlAdId) {
+      sessionStorage.setItem('activeAdId', urlAdId);
+      console.log(`🎯 Captured Active Ad ID: ${urlAdId}`);
+    }
+
     const observerOptions = {
       threshold: 0.15,
       rootMargin: '0px 0px -50px 0px'

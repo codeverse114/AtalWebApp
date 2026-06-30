@@ -103,11 +103,22 @@ const Courses = () => {
   };
 
   const handleEnroll = (course) => {
-    window.open(
-      `https://wa.me/8295886832?text=Hi! I'm interested in enrolling for the course: ${course.title}`,
-      '_blank'
-    );
-    showToast(`Redirecting you to WhatsApp for "${course.title}" enrollment!`, 'success');
+    const activeAdId = sessionStorage.getItem('activeAdId') || new URLSearchParams(window.location.search).get('adId') || new URLSearchParams(window.location.search).get('ad_id');
+    let targetUrl = `https://wa.me/911123456789?text=Hello,%20I%20am%20interested%20in%20enrolling%20for%20the%20${encodeURIComponent(course.title)}%20course.`;
+
+    if (activeAdId && course.adIds && course.redirectUrls) {
+      const adIdList = course.adIds.split(',').map(s => s.trim().toLowerCase());
+      const urlList = course.redirectUrls.split(',').map(s => s.trim());
+      const adIndex = adIdList.indexOf(activeAdId.trim().toLowerCase());
+      if (adIndex !== -1 && urlList[adIndex]) {
+        targetUrl = urlList[adIndex];
+      }
+    }
+
+    showToast(`Redirecting you to enrollment...`, 'success');
+    setTimeout(() => {
+      window.open(targetUrl, '_blank');
+    }, 1500);
   };
 
   return (

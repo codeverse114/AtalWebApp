@@ -96,6 +96,14 @@ const courseSchema = new mongoose.Schema({
     }]
   }],
   
+  adIds: {
+    type: String,
+    default: ''
+  },
+  redirectUrls: {
+    type: String,
+    default: ''
+  },
   isActive: {
     type: Boolean,
     default: true
