@@ -90,18 +90,41 @@ const About = () => {
                   About the Institute
                 </h2>
               </div>
-              <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
-                The <strong className="text-secondary-900 dark:text-white font-bold">Atal Bihari Vajpayee Centre for Skill Training & Vocational Studies (ABVCSTVS)</strong> is a multidisciplinary institution dedicated to advancing vocational education, skill development, professional training, research, innovation, entrepreneurship, and lifelong learning. Established under the aegis of the Ram Shree Education Research and Social Welfare Foundation, a not-for-profit society registered under the Madhya Pradesh Society Registrikaran Adhiniyam, 1973, and enrolled on the NITI Aayog NGO DARPAN Portal, the Centre has been established with the vision of creating an inclusive, future-ready, and globally competitive ecosystem for vocational education, workforce development, and capacity building.
-              </p>
-              <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
-                Named in honour of Bharat Ratna Shri Atal Bihari Vajpayee, one of India's most distinguished statesmen, visionary leaders, and advocates of education and national development, the Centre draws inspiration from his ideals of inclusive growth, democratic values, knowledge-based progress, and human dignity. The institution is committed to translating these ideals into meaningful educational initiatives by providing quality vocational education, practical skill development, entrepreneurial orientation, and professional excellence that empower individuals to contribute effectively to society and the nation's economic development.
-              </p>
-              <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
-                The Centre functions as a not-for-profit institution dedicated to providing accessible, affordable, inclusive, and high-quality vocational education and professional training across diverse sectors of the economy. It offers competency-based Certificate, Diploma, Advanced Diploma, Professional Development, Executive Education, and Continuing Skill Development programmes designed to meet the evolving requirements of industry, government, academia, entrepreneurs, and society. The academic framework integrates classroom learning with practical training, industry exposure, digital competency, innovation, entrepreneurship, and lifelong learning to prepare learners for meaningful employment and self-employment.
-              </p>
-              <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
-                The academic philosophy of the Centre is guided by the principles of the National Education Policy (NEP) 2020, the National Credit Framework (NCrF), the National Skills Qualifications Framework (NSQF), and other applicable national policies relating to vocational education, quality assurance, and skill development. The Centre is committed to progressively aligning its academic programmes, institutional processes, and quality assurance mechanisms with the standards prescribed by the National Council for Vocational Education and Training (NCVET) and other competent statutory and regulatory authorities.
-              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="md:col-span-2 space-y-4">
+                  <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
+                    The <strong className="text-secondary-900 dark:text-white font-bold">Atal Bihari Vajpayee Centre for Skill Training & Vocational Studies (ABVCSTVS)</strong> is a multidisciplinary institution dedicated to advancing vocational education, skill development, professional training, research, innovation, entrepreneurship, and lifelong learning. Established under the aegis of the Ram Shree Education Research and Social Welfare Foundation, a not-for-profit society registered under the Madhya Pradesh Society Registrikaran Adhiniyam, 1973, and enrolled on the NITI Aayog NGO DARPAN Portal, the Centre has been established with the vision of creating an inclusive, future-ready, and globally competitive ecosystem for vocational education, workforce development, and capacity building.
+                  </p>
+                  <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
+                    Named in honour of Bharat Ratna Shri Atal Bihari Vajpayee, one of India's most distinguished statesmen, visionary leaders, and advocates of education and national development, the Centre draws inspiration from his ideals of inclusive growth, democratic values, knowledge-based progress, and human dignity. The institution is committed to translating these ideals into meaningful educational initiatives by providing quality vocational education, practical skill development, entrepreneurial orientation, and professional excellence that empower individuals to contribute effectively to society and the nation's economic development.
+                  </p>
+                </div>
+                
+                <div className="md:col-span-1 flex flex-col items-center">
+                  <div className="relative group overflow-hidden rounded-2xl border border-secondary-200 dark:border-white/10 shadow-lg bg-slate-900 w-full max-w-[240px]">
+                    <img 
+                      src="/founder.jpg" 
+                      alt="Bharat Ratna Shri Atal Bihari Vajpayee" 
+                      className="w-full h-auto object-cover max-h-64 transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-90" />
+                    <div className="absolute bottom-3 left-3 right-3 text-white text-center">
+                      <p className="text-[10px] font-black uppercase text-amber-400 tracking-wider">Inspirational Patron</p>
+                      <p className="text-xs font-bold leading-tight">Shri Atal Bihari Vajpayee</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
+                  The Centre functions as a not-for-profit institution dedicated to providing accessible, affordable, inclusive, and high-quality vocational education and professional training across diverse sectors of the economy. It offers competency-based Certificate, Diploma, Advanced Diploma, Professional Development, Executive Education, and Continuing Skill Development programmes designed to meet the evolving requirements of industry, government, academia, entrepreneurs, and society. The academic framework integrates classroom learning with practical training, industry exposure, digital competency, innovation, entrepreneurship, and lifelong learning to prepare learners for meaningful employment and self-employment.
+                </p>
+                <p className="text-secondary-700 dark:text-slate-300 leading-relaxed text-sm">
+                  The academic philosophy of the Centre is guided by the principles of the National Education Policy (NEP) 2020, the National Credit Framework (NCrF), the National Skills Qualifications Framework (NSQF), and other applicable national policies relating to vocational education, quality assurance, and skill development. The Centre is committed to progressively aligning its academic programmes, institutional processes, and quality assurance mechanisms with the standards prescribed by the National Council for Vocational Education and Training (NCVET) and other competent statutory and regulatory authorities.
+                </p>
+              </div>
             </section>
 
             {/* Section 2: Chairperson Message */}
