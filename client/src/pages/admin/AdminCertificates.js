@@ -17,6 +17,9 @@ const AdminCertificates = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [formData, setFormData] = useState({
     certificateId: '',
+    enrolmentNo: '',
+    rollNo: '',
+    dob: '',
     studentName: '',
     courseName: '',
     grade: '',
@@ -91,6 +94,9 @@ const AdminCertificates = () => {
     setEditingCertificate(certificate);
     setFormData({
       certificateId: certificate.certificateId,
+      enrolmentNo: certificate.enrolmentNo || '',
+      rollNo: certificate.rollNo || '',
+      dob: certificate.dob ? new Date(certificate.dob).toISOString().split('T')[0] : '',
       studentName: certificate.studentName,
       courseName: certificate.courseName,
       grade: certificate.grade,
@@ -124,6 +130,9 @@ const AdminCertificates = () => {
   const resetForm = () => {
     setFormData({
       certificateId: '',
+      enrolmentNo: '',
+      rollNo: '',
+      dob: '',
       studentName: '',
       courseName: '',
       grade: '',
@@ -248,7 +257,7 @@ const AdminCertificates = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="space-y-3">
                     <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Certificate ID</label>
                     <input
@@ -261,6 +270,33 @@ const AdminCertificates = () => {
                     />
                   </div>
                   <div className="space-y-3">
+                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Enrolment No</label>
+                    <input
+                      type="text"
+                      name="enrolmentNo"
+                      value={formData.enrolmentNo}
+                      onChange={handleChange}
+                      placeholder="e.g., ENR-2024-001"
+                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Roll No</label>
+                    <input
+                      type="text"
+                      name="rollNo"
+                      value={formData.rollNo}
+                      onChange={handleChange}
+                      placeholder="e.g., 240101"
+                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
                     <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Student Full Name</label>
                     <input
                       type="text"
@@ -268,6 +304,17 @@ const AdminCertificates = () => {
                       value={formData.studentName}
                       onChange={handleChange}
                       className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none text-lg font-bold"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-secondary-400 dark:text-slate-500 uppercase tracking-widest ml-1">Date of Birth (DOB)</label>
+                    <input
+                      type="date"
+                      name="dob"
+                      value={formData.dob}
+                      onChange={handleChange}
+                      className="w-full bg-slate-900/50 dark:bg-white/5 border border-white/10 h-16 px-6 rounded-2xl text-secondary-900 dark:text-white focus:ring-2 ring-primary-500/50 transition-all outline-none"
                       required
                     />
                   </div>
@@ -419,7 +466,10 @@ const AdminCertificates = () => {
                             <div className="text-sm font-black text-secondary-900 dark:text-white">
                               {certificate.certificateId}
                             </div>
-                            <div className="text-[10px] font-black uppercase text-secondary-500 dark:text-slate-500 tracking-wider">
+                            <div className="text-[10px] font-semibold text-secondary-500 dark:text-slate-400">
+                              Enrol: {certificate.enrolmentNo || 'N/A'} | Roll: {certificate.rollNo || 'N/A'}
+                            </div>
+                            <div className="text-[9px] font-black uppercase text-secondary-400 dark:text-slate-500 tracking-wider">
                               Issued: {new Date(certificate.issueDate).toLocaleDateString()}
                             </div>
                           </div>
@@ -428,6 +478,7 @@ const AdminCertificates = () => {
                       <td className="px-8 py-6">
                         <div className="flex flex-col">
                           <span className="text-sm font-bold text-secondary-900 dark:text-slate-200">{certificate.studentName}</span>
+                          <span className="text-[10px] text-secondary-500 dark:text-slate-400">DOB: {certificate.dob ? new Date(certificate.dob).toLocaleDateString() : 'N/A'}</span>
                           <span className="text-xs text-secondary-500 dark:text-slate-500 italic">{certificate.studentEmail}</span>
                         </div>
                       </td>

@@ -152,6 +152,9 @@ const seedDatabase = async () => {
     const certificates = [
       {
         certificateId: 'CERT-2024-001',
+        enrolmentNo: 'ENR-2024-001',
+        rollNo: '240101',
+        dob: new Date('2000-05-15'),
         studentName: 'Rahul Kumar',
         courseName: 'Web Development Fundamentals',
         grade: 'A',
@@ -166,6 +169,9 @@ const seedDatabase = async () => {
       },
       {
         certificateId: 'CERT-2024-002',
+        enrolmentNo: 'ENR-2024-002',
+        rollNo: '240102',
+        dob: new Date('2001-08-22'),
         studentName: 'Priya Sharma',
         courseName: 'Digital Marketing Mastery',
         grade: 'A+',
@@ -180,6 +186,9 @@ const seedDatabase = async () => {
       },
       {
         certificateId: 'CERT-2024-003',
+        enrolmentNo: 'ENR-2024-003',
+        rollNo: '240103',
+        dob: new Date('1999-12-10'),
         studentName: 'Amit Patel',
         courseName: 'Electrical Wiring Basics',
         grade: 'B+',
@@ -194,6 +203,9 @@ const seedDatabase = async () => {
       },
       {
         certificateId: 'CERT-2024-004',
+        enrolmentNo: 'ENR-2024-004',
+        rollNo: '240104',
+        dob: new Date('2002-03-05'),
         studentName: 'Neha Gupta',
         courseName: 'Business Management Essentials',
         grade: 'A',

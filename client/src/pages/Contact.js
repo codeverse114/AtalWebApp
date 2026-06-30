@@ -33,7 +33,7 @@ const Contact = () => {
     { icon: MapPin,  title: 'Address',      content: 'Education Complex, Sector 15, New Delhi - 110001', color: 'from-red-500 to-rose-600' },
     { icon: Phone,   title: 'Phone',        content: '+91 11 2345 6789',                                  color: 'from-green-500 to-emerald-600' },
     { icon: Mail,    title: 'Email',         content: 'info@abvstvs.edu.in',                               color: 'from-blue-500 to-indigo-600' },
-    { icon: Clock,   title: 'Office Hours', content: 'Mon – Sat: 9:00 AM – 5:00 PM',                       color: 'from-purple-500 to-violet-600' },
+    { icon: Clock,   title: 'Office Hours', content: 'Mon – Sat: 10:00 AM – 5:00 PM',                       color: 'from-purple-500 to-violet-600' },
   ];
 
   const departments = [
@@ -44,7 +44,7 @@ const Contact = () => {
   ];
 
   const faqs = [
-    { q: 'How do I apply for admission?',          a: 'You can apply by filling out the online application form on our portal or by visiting our campus during office hours (Mon–Sat, 9 AM–5 PM).' },
+    { q: 'How do I apply for admission?',          a: 'You can apply by filling out the online application form on our portal or by visiting our campus during office hours (Mon–Sat, 10 AM–5 PM).' },
     { q: 'What are the admission requirements?',   a: 'Requirements vary by course. Generally, you need to have completed the minimum education level specified per program. Contact the admissions office for details.' },
     { q: 'Do you provide placement assistance?',   a: 'Yes! We provide 100% placement assistance and career guidance to all our students through our dedicated placement cell with industry partnerships.' },
     { q: 'Are scholarships available?',            a: 'Yes, we offer merit-based scholarships to eligible students. Please contact the admissions office or call +91 11 2345 6789 for scholarship details.' },

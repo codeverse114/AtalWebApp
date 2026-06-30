@@ -56,8 +56,23 @@ router.get('/', auth, async (req, res) => {
 // Verify certificate (public)
 router.get('/verify/:certificateId', async (req, res) => {
   try {
+    const { dob } = req.query;
+    if (!dob) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Date of birth is required for verification'
+      });
+    }
+
+    const searchId = req.params.certificateId.trim();
+    
+    // Find certificate matching certificateId, enrolmentNo, or rollNo
     const certificate = await Certificate.findOne({
-      certificateId: req.params.certificateId,
+      $or: [
+        { certificateId: { $regex: new RegExp(`^${searchId}$`, 'i') } },
+        { enrolmentNo: { $regex: new RegExp(`^${searchId}$`, 'i') } },
+        { rollNo: { $regex: new RegExp(`^${searchId}$`, 'i') } }
+      ],
       isActive: true
     });
 
@@ -65,6 +80,17 @@ router.get('/verify/:certificateId', async (req, res) => {
       return res.status(404).json({
         status: 'error',
         message: 'Certificate not found or invalid'
+      });
+    }
+
+    // Verify Date of Birth
+    const certDobStr = new Date(certificate.dob).toISOString().split('T')[0];
+    const queryDobStr = new Date(dob).toISOString().split('T')[0];
+
+    if (certDobStr !== queryDobStr) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'Verification failed. Date of birth does not match.'
       });
     }
 
@@ -91,6 +117,9 @@ router.get('/verify/:certificateId', async (req, res) => {
 // Create new certificate (admin only)
 router.post('/', auth, [
   body('certificateId').trim().notEmpty().withMessage('Certificate ID is required'),
+  body('enrolmentNo').trim().notEmpty().withMessage('Enrolment Number is required'),
+  body('rollNo').trim().notEmpty().withMessage('Roll Number is required'),
+  body('dob').isISO8601().withMessage('Valid Date of Birth (dob) is required'),
   body('studentName').trim().notEmpty().withMessage('Student name is required'),
   body('courseName').trim().notEmpty().withMessage('Course name is required'),
   body('grade').trim().notEmpty().withMessage('Grade is required'),
@@ -117,15 +146,22 @@ router.post('/', auth, [
       });
     }
 
-    // Check if certificate ID already exists
-    const existingCertificate = await Certificate.findOne({
-      certificateId: req.body.certificateId
+    // Check if certificate ID, enrolment number, or roll number already exists
+    const existingCert = await Certificate.findOne({
+      $or: [
+        { certificateId: req.body.certificateId },
+        { enrolmentNo: req.body.enrolmentNo },
+        { rollNo: req.body.rollNo }
+      ]
     });
 
-    if (existingCertificate) {
+    if (existingCert) {
+      let duplicateField = 'Certificate ID';
+      if (existingCert.enrolmentNo === req.body.enrolmentNo) duplicateField = 'Enrolment Number';
+      if (existingCert.rollNo === req.body.rollNo) duplicateField = 'Roll Number';
       return res.status(400).json({
         status: 'error',
-        message: 'Certificate ID already exists'
+        message: `${duplicateField} already exists`
       });
     }
 

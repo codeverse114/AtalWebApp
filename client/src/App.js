@@ -17,6 +17,10 @@ import AdminNotices from './pages/admin/AdminNotices';
 import AdminCertificates from './pages/admin/AdminCertificates';
 import AdminStudents from './pages/admin/AdminStudents';
 import ProtectedRoute from './components/ProtectedRoute';
+import Scholarship from './pages/Scholarship';
+import AdminScholarships from './pages/admin/AdminScholarships';
+import About from './pages/About';
+import FAQs from './pages/FAQs';
 import './index.css';
 
 const App = () => {
@@ -70,6 +74,9 @@ const App = () => {
               <Route path="/courses" element={<Courses />} />
               <Route path="/notices" element={<Notices />} />
               <Route path="/certificate" element={<CertificateVerification />} />
+              <Route path="/scholarship" element={<Scholarship />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/faqs" element={<FAQs />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/course/:id" element={<CourseDetails />} />
@@ -98,6 +105,11 @@ const App = () => {
               <Route path="/admin/students" element={
                 <ProtectedRoute role="admin">
                   <AdminStudents />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/scholarships" element={
+                <ProtectedRoute role="admin">
+                  <AdminScholarships />
                 </ProtectedRoute>
               } />
             </Routes>

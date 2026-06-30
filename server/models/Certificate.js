@@ -7,6 +7,22 @@ const certificateSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  enrolmentNo: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  rollNo: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  dob: {
+    type: Date,
+    required: true
+  },
   studentName: {
     type: String,
     required: true,

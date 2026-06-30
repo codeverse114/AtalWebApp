@@ -10,6 +10,7 @@ const Footer = () => {
     { path: '/courses',     label: 'Courses' },
     { path: '/notices',     label: 'Notices' },
     { path: '/certificate', label: 'Certificate Verification' },
+    { path: '/scholarship', label: 'Scholarship Form' },
     { path: '/contact',     label: 'Contact Us' },
   ];
 
@@ -89,7 +90,7 @@ const Footer = () => {
                 { icon: MapPin, text: 'Education Complex, Sector 15, New Delhi - 110001' },
                 { icon: Phone,  text: '+91 11 2345 6789' },
                 { icon: Mail,   text: 'info@abvstvs.edu.in' },
-                { icon: Clock,  text: 'Mon – Sat: 9:00 AM – 5:00 PM' },
+                { icon: Clock,  text: 'Mon – Sat: 10:00 AM – 5:00 PM' },
               ].map(({ icon: Icon, text }, i) => (
                 <div key={i} className="flex items-start gap-3 text-sm text-secondary-400">
                   <Icon className="h-4 w-4 text-primary-500 flex-shrink-0 mt-0.5" />

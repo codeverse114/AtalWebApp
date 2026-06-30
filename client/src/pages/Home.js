@@ -132,12 +132,7 @@ const Home = () => {
           style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 glass-morphism rounded-full text-xs font-semibold mb-6 animate-fadeInUp">
-            <Star className="h-3.5 w-3.5 text-gold-400 fill-gold-400" />
-            <span className="text-blue-100">Government Recognized • NSDC Certified</span>
-            <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
-          </div>
+          <div className="h-4" />
 
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-5 leading-tight animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
             Atal Bihari Vajpayee
@@ -173,7 +168,7 @@ const Home = () => {
 
           {/* Trust badges */}
           <div className="flex flex-wrap justify-center gap-6 text-sm text-blue-200 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
-            {['100% Job Assistance', 'Govt. Recognized', 'Expert Faculty', 'Scholarship Available'].map((b) => (
+            {['100% Job Assistance', 'Industry Curriculum', 'Expert Faculty', 'Scholarship Available'].map((b) => (
               <span key={b} className="flex items-center gap-1.5">
                 <CheckCircle className="h-4 w-4 text-emerald-400" />
                 {b}

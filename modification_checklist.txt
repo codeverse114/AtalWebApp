@@ -1,0 +1,98 @@
+============================================================
+           ATAL WEB APP - MODIFICATION CHECKLIST
+============================================================
+Please provide the following details to replace the sample
+content in the application.
+
+1. BASIC INSTITUTION INFORMATION
+--------------------------------
+Institution Full Name: [e.g., Atal Bihari Vajpayee Centre...]
+Institution Short Name: [e.g., ABVSTVS]
+Tagline/Motto: [e.g., Building Skilled Bharat]
+Logo Path: [Currently /logo.png]
+
+2. CONTACT DETAILS
+------------------
+Main Address:
+Line 1: [e.g., Education Complex, Sector 15]
+Line 2: [e.g., New Delhi - 110001]
+City/State/Zip: [e.g., India]
+
+Primary Phone: [e.g., +91 11 2345 6789]
+Primary Email: [e.g., info@example.edu.in]
+Office Hours: [e.g., Mon – Sat: 9:00 AM – 5:00 PM]
+
+3. MAP CONFIGURATION
+--------------------
+Google Maps Search Query: [e.g., Connaught Place New Delhi]
+(Used for the embedded map on the Contact page)
+
+4. SOCIAL MEDIA LINKS
+---------------------
+Facebook URL: [#]
+Twitter/X URL: [#]
+Instagram URL: [#]
+LinkedIn URL: [#]
+
+5. DEPARTMENT CONTACTS
+----------------------
+[Department 1]
+Name: [e.g., Admissions]
+Email: [e.g., admissions@example.edu.in]
+Phone: [e.g., +91 11 2345 6789]
+Description: [For all admission related queries]
+
+[Department 2]
+Name: [e.g., Academic Affairs]
+Email: [e.g., academics@example.edu.in]
+Phone: [e.g., +91 11 2345 6790]
+Description: [For course and curriculum related queries]
+
+[Department 3]
+Name: [e.g., Student Support]
+Email: [e.g., support@example.edu.in]
+Phone: [e.g., +91 11 2345 6791]
+Description: [For student services and support]
+
+[Department 4]
+Name: [e.g., Administration]
+Email: [e.g., admin@example.edu.in]
+Phone: [e.g., +91 11 2345 6792]
+Description: [For administrative and general queries]
+
+6. HOMEPAGE TICKER & ANNOUNCEMENTS
+----------------------------------
+Ticker Messages:
+- [Message 1: e.g., Admissions Open for 2024-25]
+- [Message 2: e.g., Limited Seats Available]
+- [Message 3: e.g., Last Date: 31st March 2024]
+
+7. LIVE STATS (Placeholders)
+----------------------------
+Total Students Count: [e.g., 486]
+Total Courses Count: [e.g., 12]
+Certificates Issued: [e.g., 156]
+
+8. FREQUENTLY ASKED QUESTIONS (FAQs)
+------------------------------------
+Q1: [Question]
+A1: [Answer]
+
+Q2: [Question]
+A2: [Answer]
+
+Q3: [Question]
+A3: [Answer]
+
+9. CERTIFICATIONS & ACCREDITATIONS
+---------------------------------
+Labels: [e.g., Government Recognized, NSDC Certified]
+
+============================================================
+NOTE: Once these details are filled, they need to be updated 
+in the following files:
+- client/src/pages/Home.js
+- client/src/pages/Contact.js
+- client/src/components/Footer.js
+- client/src/components/Navbar.js
+============================================================

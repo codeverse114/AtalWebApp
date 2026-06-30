@@ -4,6 +4,7 @@ import api from '../utils/axios';
 
 const CertificateVerification = () => {
   const [certificateId, setCertificateId] = useState('');
+  const [dob, setDob] = useState('');
   const [loading, setLoading] = useState(false);
   const [certificate, setCertificate] = useState(null);
   const [error, setError] = useState('');
@@ -11,14 +12,17 @@ const CertificateVerification = () => {
 
   const handleVerify = async (e) => {
     e.preventDefault();
-    if (!certificateId.trim()) { setError('Please enter a certificate ID'); return; }
+    if (!certificateId.trim()) { setError('Please enter a certificate ID, enrolment number, or roll number'); return; }
+    if (!dob) { setError('Please enter your Date of Birth'); return; }
     setLoading(true);
     setError('');
     setCertificate(null);
     setIsVerified(false);
 
     try {
-      const res = await api.get(`/api/certificates/verify/${certificateId.trim()}`);
+      const res = await api.get(`/api/certificates/verify/${certificateId.trim()}`, {
+        params: { dob }
+      });
       if (res.data.status === 'success') {
         setCertificate(res.data.data);
         setIsVerified(true);
@@ -26,8 +30,8 @@ const CertificateVerification = () => {
     } catch (err) {
       setError(
         err.response?.status === 404
-          ? 'Certificate not found. Please check the ID and try again.'
-          : 'An error occurred. Please try again later.'
+          ? 'Certificate not found. Please check your inputs and try again.'
+          : err.response?.data?.message || 'An error occurred. Please try again later.'
       );
     } finally {
       setLoading(false);
@@ -36,6 +40,7 @@ const CertificateVerification = () => {
 
   const handleReset = () => {
     setCertificateId('');
+    setDob('');
     setCertificate(null);
     setError('');
     setIsVerified(false);
@@ -77,25 +82,43 @@ const CertificateVerification = () => {
           </div>
 
           <form onSubmit={handleVerify} className="space-y-5">
-            <div>
-              <label htmlFor="certificateId" className="label">Certificate ID</label>
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-400" />
-                <input
-                  id="certificateId"
-                  type="text"
-                  value={certificateId}
-                  onChange={(e) => { setCertificateId(e.target.value); setError(''); }}
-                  placeholder="e.g., CERT-2024-001"
-                  className="input pl-12 font-mono"
-                />
-                {certificateId && (
-                  <button type="button" onClick={() => setCertificateId('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-400 hover:text-secondary-600">
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label htmlFor="certificateId" className="label">Certificate ID / Enrolment No / Roll No</label>
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-400" />
+                  <input
+                    id="certificateId"
+                    type="text"
+                    value={certificateId}
+                    onChange={(e) => { setCertificateId(e.target.value); setError(''); }}
+                    placeholder="e.g., CERT-2024-001"
+                    className="input pl-12 font-mono"
+                  />
+                  {certificateId && (
+                    <button type="button" onClick={() => setCertificateId('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-400 hover:text-secondary-600">
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+                <p className="mt-1.5 text-xs text-secondary-400">Enter your Certificate ID, Enrolment Number, or Roll Number</p>
               </div>
-              <p className="mt-1.5 text-xs text-secondary-400">The certificate ID is typically printed on the bottom of the certificate document</p>
+
+              <div>
+                <label htmlFor="dob" className="label">Date of Birth (DOB)</label>
+                <div className="relative">
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-400" />
+                  <input
+                    id="dob"
+                    type="date"
+                    value={dob}
+                    onChange={(e) => { setDob(e.target.value); setError(''); }}
+                    className="input pl-12"
+                    required
+                  />
+                </div>
+                <p className="mt-1.5 text-xs text-secondary-400">Lock: verification details require matching student's Date of Birth</p>
+              </div>
             </div>
 
             {error && (
@@ -165,6 +188,9 @@ const CertificateVerification = () => {
                     <div className="space-y-3">
                       {[
                         { label: 'Student Name', value: certificate.studentName },
+                        { label: 'Date of Birth (DOB)', value: new Date(certificate.dob).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) },
+                        { label: 'Enrolment Number', value: certificate.enrolmentNo, mono: true },
+                        { label: 'Roll Number', value: certificate.rollNo, mono: true },
                         { label: 'Grade', value: certificate.grade },
                         { label: 'Certificate ID', value: certificate.certificateId, mono: true },
                       ].map(({ label, value, mono }) => (

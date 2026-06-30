@@ -30,15 +30,34 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const isActiveLink = (path) => location.pathname === path;
+  const isActiveLink = (path) => {
+    if (path === '/') return location.pathname === '/';
+    if (path.startsWith('/about')) return location.pathname === '/about';
+    return location.pathname === path;
+  };
 
   const publicLinks = [
     { path: '/', label: 'Home' },
-    { path: '/courses', label: 'Courses' },
-    { path: '/notices', label: 'Notices' },
-    { path: '/certificate', label: 'Certificate' },
+    {
+      label: 'About Us',
+      dropdown: [
+        { path: '/about#institute', label: 'About Institute' },
+        { path: '/about#founder', label: 'Founder\'s Message' },
+        { path: '/about#director', label: 'Director\'s Message' },
+        { path: '/about#vision-mission', label: 'Vision & Mission' },
+        { path: '/about#objectives', label: 'Institutional Objectives' }
+      ]
+    },
+    {
+      label: 'Programs',
+      dropdown: [
+        { path: '/courses', label: 'Our Courses' },
+        { path: '/scholarship', label: 'Scholarship Application' }
+      ]
+    },
+    { path: '/certificate', label: 'Verification' },
+    { path: '/faqs', label: 'FAQs' },
     { path: '/contact', label: 'Contact' },
-    // { path: '/login', label: 'Admin Login' },
   ];
 
   const adminLinks = [
@@ -47,6 +66,7 @@ const Navbar = () => {
     { path: '/admin/notices', label: 'Manage Notices', icon: Megaphone },
     { path: '/admin/certificates', label: 'Manage Certificates', icon: Award },
     { path: '/admin/students', label: 'Manage Students', icon: Users },
+    { path: '/admin/scholarships', label: 'Scholarship Apps', icon: GraduationCap },
   ];
 
   return (
@@ -61,37 +81,71 @@ const Navbar = () => {
         <div className={`flex justify-between items-center transition-all duration-500 ${scrolled ? 'h-12' : 'h-14'}`}>
 
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2.5 group flex-shrink-0">
-            <div className="relative">
+          <Link to="/" className="flex items-center space-x-2.5 group flex-shrink-0 max-w-[280px] sm:max-w-xs md:max-w-md lg:max-w-lg">
+            <div className="relative flex-shrink-0">
               <div className="group-hover:scale-105 transition-transform duration-300">
                 <img src="/logo.png" alt="ABVSTVS Logo" className="h-11 w-11 object-contain filter drop-shadow-md" />
               </div>
             </div>
-            <div>
-              <h1 className={`text-lg font-extrabold leading-tight transition-colors duration-500 ${scrolled ? 'text-white' : 'text-primary-900'}`}>ABVSTVS</h1>
-              <p className={`text-[9px] hidden sm:block font-medium tracking-wide leading-none transition-colors duration-500 ${scrolled ? 'text-blue-300/80' : 'text-secondary-500'}`}>
-                Skill Training & Vocational Studies
+            <div className="min-w-0">
+              <h1 className={`text-xs md:text-sm font-black tracking-tight leading-tight transition-colors duration-500 ${scrolled ? 'text-white' : 'text-primary-900'}`}>
+                Atal Bihari Vajpayee Centre for
+              </h1>
+              <p className={`text-[9px] font-bold uppercase tracking-wider leading-none transition-colors duration-500 ${scrolled ? 'text-blue-300/80' : 'text-secondary-500'}`}>
+                Skill Training &amp; Vocational Studies
               </p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {publicLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`nav-link transition-colors duration-500 ${isActiveLink(link.path)
-                    ? scrolled ? 'text-gold-400 bg-white/10' : 'nav-link-active'
-                    : scrolled ? 'text-blue-100 hover:text-white hover:bg-white/5' : ''
-                  }`}
-              >
-                {link.label}
-                {isActiveLink(link.path) && (
-                  <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full transition-colors ${scrolled ? 'bg-gold-500' : 'bg-primary-600'}`} />
-                )}
-              </Link>
-            ))}
+            {publicLinks.map((link, idx) => {
+              if (link.dropdown) {
+                const isDropdownActive = link.dropdown.some(sub => isActiveLink(sub.path));
+                return (
+                  <div key={idx} className="relative group py-2">
+                    <button
+                      className={`nav-link flex items-center gap-1 transition-colors duration-500 ${
+                        isDropdownActive ? 'text-primary-800 bg-primary-100/50 font-black' : scrolled ? 'text-blue-100 hover:text-white hover:bg-white/5' : ''
+                      }`}
+                    >
+                      {link.label}
+                      <ChevronDown className="h-3 w-3 group-hover:rotate-180 transition-transform duration-200" />
+                    </button>
+                    {/* Dropdown Menu */}
+                    <div className="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                                   translate-y-2 group-hover:translate-y-0 transition-all duration-200
+                                   bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl rounded-xl shadow-xl border border-secondary-100 dark:border-white/5 py-1.5 z-50 overflow-hidden">
+                      {link.dropdown.map((sub, sIdx) => (
+                        <a
+                          key={sIdx}
+                          href={sub.path}
+                          className="block px-4 py-2 text-xs font-semibold text-secondary-700 dark:text-slate-200 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 transition-colors"
+                        >
+                          {sub.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`nav-link transition-colors duration-500 ${isActiveLink(link.path)
+                      ? scrolled ? 'text-gold-400 bg-white/10' : 'nav-link-active'
+                      : scrolled ? 'text-blue-100 hover:text-white hover:bg-white/5' : ''
+                    }`}
+                >
+                  {link.label}
+                  {isActiveLink(link.path) && (
+                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full transition-colors ${scrolled ? 'bg-gold-500' : 'bg-primary-600'}`} />
+                  )}
+                </Link>
+              );
+            })}
 
             {/* Admin Dropdown */}
             {isAuthenticated && user?.role === 'admin' && (
@@ -175,18 +229,43 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden animate-slideDown border-t border-secondary-100">
           <div className="bg-white/95 backdrop-blur-xl px-4 pt-4 pb-5 space-y-1">
-            {publicLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${isActiveLink(link.path)
-                    ? 'bg-primary-600 text-white shadow'
-                    : 'text-secondary-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-slate-800'
-                  }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {publicLinks.map((link, idx) => {
+              if (link.dropdown) {
+                return (
+                  <div key={idx} className="space-y-0.5 py-1">
+                    <div className="px-4 py-1 text-[10px] font-bold text-secondary-400 dark:text-slate-500 uppercase tracking-widest">
+                      {link.label}
+                    </div>
+                    {link.dropdown.map((sub, sIdx) => (
+                      <a
+                        key={sIdx}
+                        href={sub.path}
+                        className={`block px-6 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                          isActiveLink(sub.path)
+                            ? 'bg-primary-600/10 text-primary-600 dark:text-primary-400 font-bold'
+                            : 'text-secondary-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {sub.label}
+                      </a>
+                    ))}
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`block px-4 py-2 rounded-xl text-sm font-semibold transition-all ${isActiveLink(link.path)
+                      ? 'bg-primary-600 text-white shadow'
+                      : 'text-secondary-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-slate-800'
+                    }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
 
             <button
               onClick={toggleTheme}

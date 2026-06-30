@@ -114,6 +114,7 @@ const authRoutes = require('./routes/auth');
 const courseRoutes = require('./routes/courses');
 const noticeRoutes = require('./routes/notices');
 const certificateRoutes = require('./routes/certificates');
+const scholarshipRoutes = require('./routes/scholarships');
 const adminRoutes = require('./routes/admin');
 const healthRoutes = require('./routes/health');
 
@@ -122,6 +123,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/courses', requireDB, courseRoutes);
 app.use('/api/notices', requireDB, noticeRoutes);
 app.use('/api/certificates', requireDB, certificateRoutes);
+app.use('/api/scholarships', requireDB, scholarshipRoutes);
 app.use('/api/admin', requireDB, adminRoutes);
 app.use('/api/health', healthRoutes);
 
