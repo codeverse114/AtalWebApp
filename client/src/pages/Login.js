@@ -67,7 +67,7 @@ const Login = () => {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white/80 dark:bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/40 dark:border-white/20 shadow-2xl p-8 animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
+        <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-3xl border border-white/40 dark:border-slate-800/60 shadow-2xl p-8 animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
 
           {error && (
             <div className="mb-5 p-4 bg-red-500/20 border border-red-400/40 text-red-200 rounded-xl text-sm flex items-start gap-2 animate-slideDown">
@@ -105,7 +105,7 @@ const Login = () => {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-300" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-secondary-400 dark:text-blue-300" />
                 <input
                   id="password"
                   name="password"
@@ -113,15 +113,15 @@ const Login = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-11 pr-12 py-3.5 bg-white/10 border border-white/20 rounded-xl focus:outline-none
+                  className="w-full pl-11 pr-12 py-3.5 bg-white/50 dark:bg-white/10 border border-secondary-200 dark:border-white/20 rounded-xl focus:outline-none
                              focus:ring-2 focus:ring-primary-400 focus:border-transparent
-                             text-white placeholder-blue-300/60 transition-all duration-300 hover:bg-white/15"
+                             text-secondary-900 dark:text-white placeholder-secondary-400 dark:placeholder-blue-300/60 transition-all duration-300 hover:bg-white/70 dark:hover:bg-white/15"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-400 dark:text-blue-300 hover:text-secondary-600 dark:hover:text-white transition-colors"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
