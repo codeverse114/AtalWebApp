@@ -131,7 +131,7 @@ const Courses = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           {[
             { label: 'Available Courses', value: filteredCourses.length, color: 'text-primary-600' },
             { label: 'Categories', value: categories.length - 1, color: 'text-emerald-600' },
