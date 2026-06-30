@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, User, Users, LogOut, Settings, ChevronDown, LayoutDashboard, BookOpen, Megaphone, Award, Sun, Moon } from 'lucide-react';
+import { Menu, X, User, Users, LogOut, Settings, ChevronDown, LayoutDashboard, BookOpen, Megaphone, Award, GraduationCap, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
