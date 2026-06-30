@@ -115,7 +115,7 @@ const Navbar = () => {
                     {/* Dropdown Menu */}
                     <div className="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible
                                    translate-y-2 group-hover:translate-y-0 transition-all duration-200
-                                   bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl rounded-xl shadow-xl border border-secondary-100 dark:border-white/5 py-1.5 z-50 overflow-hidden">
+                                   bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-secondary-200 dark:border-white/10 py-1.5 z-50 overflow-hidden">
                       {link.dropdown.map((sub, sIdx) => (
                         <a
                           key={sIdx}
@@ -162,8 +162,8 @@ const Navbar = () => {
 
                 {/* Dropdown — shown on group-hover */}
                 <div className="absolute right-0 mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible
-                               translate-y-2 group-hover:translate-y-0 transition-all duration-200
-                               bg-white/98 backdrop-blur-xl rounded-2xl shadow-2xl border border-secondary-100 py-2 z-50 overflow-hidden">
+                                translate-y-2 group-hover:translate-y-0 transition-all duration-200
+                                bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-secondary-200 dark:border-white/10 py-2 z-50 overflow-hidden">
                   <div className="px-4 py-2 border-b border-secondary-100 mb-1">
                     <p className="text-xs font-bold text-secondary-500 uppercase tracking-wider">Admin Panel</p>
                   </div>
